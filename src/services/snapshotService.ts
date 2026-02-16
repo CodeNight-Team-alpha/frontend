@@ -16,7 +16,7 @@ export function getTodayString(): string {
 
 /**
  * Bildirimlerden sadece "bugün"e ait olanları döndürür.
- * asOfDate veya createdAt bugün ile eşleşenler.
+ * completedAt (tamamlanma günü) veya createdAt kullanılır.
  */
 export function getTodayNotifications(
   notifications: NotificationDto[],
@@ -25,7 +25,7 @@ export function getTodayNotifications(
   const today = getTodayString()
   const snapshotDay = toDateString(asOfDate)
   return (notifications ?? []).filter((n) => {
-    const createdDay = toDateString(n.createdAt)
-    return createdDay === today || createdDay === snapshotDay
+    const day = n.completedAt ?? toDateString(n.createdAt)
+    return day === today || day === snapshotDay
   })
 }

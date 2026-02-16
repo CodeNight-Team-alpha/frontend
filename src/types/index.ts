@@ -28,6 +28,8 @@ export interface NotificationDto {
   id: number
   sourceRef: string
   message: string
+  /** Challenge tamamlanma tarihi (YYYY-MM-DD); gösterim için bunu kullan. */
+  completedAt?: string | null
   createdAt: string
 }
 

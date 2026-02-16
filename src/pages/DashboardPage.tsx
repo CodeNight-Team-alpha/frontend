@@ -3,10 +3,21 @@ import { useQuery } from '@tanstack/react-query'
 import { getSnapshot } from '@/api/users'
 import { getHighestBadge } from '@/services/badgeService'
 import { getTodayNotifications } from '@/services/snapshotService'
+import { getChallengeName, getChallengeNames } from '@/constants/challenges'
 import MetricCard from '@/components/MetricCard'
 import BadgeDisplay from '@/components/BadgeDisplay'
 import NotificationList from '@/components/NotificationList'
-import styles from './DashboardPage.module.css'
+import {
+  Wallet,
+  Layers,
+  Cpu,
+  CalendarDays,
+  Target,
+  Award,
+  Bell,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react'
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -20,16 +31,20 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className={styles.loading}>
-        <p>Yükleniyor...</p>
+      <div className="flex flex-col items-center justify-center py-16">
+        <Loader2 className="h-10 w-10 animate-spin text-primary-500" />
+        <p className="mt-4 text-slate-500">Yükleniyor...</p>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className={styles.error}>
-        <p>{error instanceof Error ? error.message : 'Veri yüklenemedi.'}</p>
+      <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 bg-red-50 py-12 px-4">
+        <AlertCircle className="h-10 w-10 text-red-500" />
+        <p className="mt-4 text-center text-red-700">
+          {error instanceof Error ? error.message : 'Veri yüklenemedi.'}
+        </p>
       </div>
     )
   }
@@ -44,70 +59,95 @@ export default function DashboardPage() {
   const todayNotifications = getTodayNotifications(allNotifications, asOfDate)
 
   return (
-    <div className={styles.page}>
-      <h1 className={styles.pageTitle}>Dashboard</h1>
+    <div className="space-y-8">
+      <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Metrikler</h2>
-        <div className={styles.metricsGrid}>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+          <Layers className="h-5 w-5 text-primary-500" />
+          Metrikler
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             title="Günlük harcama"
             value={metrics?.spendToday != null ? `₺${metrics.spendToday.toFixed(2)}` : '—'}
+            icon={Wallet}
           />
           <MetricCard
             title="Bugünkü benzersiz kategoriler"
             value={metrics?.uniqueCategoriesToday ?? '—'}
+            icon={Layers}
           />
           <MetricCard
             title="Elektronik harcama (bugün)"
             value={metrics?.electronicsSpendToday != null ? `₺${metrics.electronicsSpendToday.toFixed(2)}` : '—'}
+            icon={Cpu}
           />
           <MetricCard
             title="Son 7 gün harcama"
             value={metrics?.spend7d != null ? `₺${metrics.spend7d.toFixed(2)}` : '—'}
+            icon={CalendarDays}
           />
         </div>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Puan</h2>
-        <div className={styles.pointsBlock}>
-          <span className={styles.pointsValue}>{totalPoints}</span>
-          <span className={styles.pointsLabel}>toplam puan</span>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+          <Target className="h-5 w-5 text-primary-500" />
+          Puan
+        </h2>
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl font-extrabold text-primary-600">{totalPoints}</span>
+          <span className="text-slate-500">toplam puan</span>
         </div>
       </section>
 
       {challenge && (challenge.challengeId || challenge.rewardPoints != null) && (
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Seçilen challenge</h2>
-          <div className={styles.challengeCard}>
-            <p>
-              <strong>Challenge ID:</strong> {challenge.challengeId ?? '—'}
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+            <Target className="h-5 w-5 text-primary-500" />
+            Seçilen görev
+          </h2>
+          <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 space-y-2">
+            <p className="text-slate-800">
+              <strong className="text-slate-600">Görev:</strong>{' '}
+              {challenge.challengeId
+                ? getChallengeName(challenge.challengeId)
+                : '—'}
             </p>
-            <p>
-              <strong>Ödül puanı:</strong> {challenge.rewardPoints ?? '—'}
+            <p className="text-slate-800">
+              <strong className="text-slate-600">Ödül puanı:</strong>{' '}
+              {challenge.rewardPoints ?? '—'}
             </p>
             {challenge.triggeredChallengeIds?.length ? (
-              <p className={styles.small}>
-                Tetiklenen: {challenge.triggeredChallengeIds.join(', ')}
+              <p className="text-sm text-slate-600">
+                <strong>Tamamladığınız görevler:</strong>{' '}
+                {getChallengeNames(challenge.triggeredChallengeIds).join(', ')}
               </p>
             ) : null}
             {challenge.suppressedChallengeIds?.length ? (
-              <p className={styles.small}>
-                Bastırılan: {challenge.suppressedChallengeIds.join(', ')}
+              <p className="text-sm text-slate-600">
+                <strong>Diğer tamamlanan görevler:</strong>{' '}
+                {getChallengeNames(challenge.suppressedChallengeIds).join(', ')}
               </p>
             ) : null}
           </div>
         </section>
       )}
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Öne çıkan rozet</h2>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+          <Award className="h-5 w-5 text-primary-500" />
+          Öne çıkan rozet
+        </h2>
         <BadgeDisplay badge={highestBadge} size="medium" />
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Bugünkü bildirimler</h2>
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+          <Bell className="h-5 w-5 text-primary-500" />
+          Bugünkü bildirimler
+        </h2>
         <NotificationList
           notifications={todayNotifications}
           emptyMessage="Bugün bildirim yok."

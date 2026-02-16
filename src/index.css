@@ -1,39 +1,15 @@
-:root {
-  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  color: #1a1a2e;
-  background-color: #f0f2f5;
-}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  min-height: 100vh;
-}
-
-a {
-  color: #6366f1;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-button {
-  cursor: pointer;
-  font-family: inherit;
-}
-
-input {
-  font-family: inherit;
-}
-
-#root {
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply antialiased text-slate-800 bg-slate-50 min-h-screen;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  #root {
+    @apply min-h-screen;
+  }
 }

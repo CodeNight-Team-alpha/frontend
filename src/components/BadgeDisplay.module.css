@@ -1,0 +1,44 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.badge.medium {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.badge.small {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.empty {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.bronze {
+  background: #d4a574;
+  color: #2d1810;
+}
+
+.silver {
+  background: #c0c0c0;
+  color: #1f2937;
+}
+
+.gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  color: #1f2937;
+}
+
+.default {
+  background: #6366f1;
+  color: #fff;
+}

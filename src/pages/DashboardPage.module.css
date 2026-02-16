@@ -1,0 +1,77 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 0.25rem;
+}
+
+.section {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.pointsBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.pointsValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #6366f1;
+}
+
+.pointsLabel {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.challengeCard {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+}
+
+.challengeCard p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.small {
+  font-size: 0.85rem !important;
+  color: #6b7280 !important;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.error {
+  color: #dc2626;
+}

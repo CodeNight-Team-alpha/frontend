@@ -3,7 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getSnapshot } from '@/api/users'
 import { getHighestBadge } from '@/services/badgeService'
 import { getTodayNotifications } from '@/services/snapshotService'
-import { getChallengeName, getChallengeNames } from '@/constants/challenges'
+import {
+  getChallengeName,
+  getChallengeNames,
+  getMetricGoalHint,
+} from '@/constants/challenges'
 import MetricCard from '@/components/MetricCard'
 import BadgeDisplay from '@/components/BadgeDisplay'
 import NotificationList from '@/components/NotificationList'
@@ -63,30 +67,43 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card sm:p-6">
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-700">
+        <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold text-slate-700">
           <Layers className="h-5 w-5 text-primary-500" />
-          Metrikler
+          Görev hedefleriniz
         </h2>
+        <p className="mb-4 text-sm text-slate-500">
+          Bu metrikler hangi görevlere yaklaştığınızı veya tamamladığınızı gösterir. Hedeflere ulaşın, puan kazanın.
+        </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             title="Günlük harcama"
             value={metrics?.spendToday != null ? `₺${metrics.spendToday.toFixed(2)}` : '—'}
             icon={Wallet}
+            goalHint={getMetricGoalHint('spendToday', metrics?.spendToday ?? null)}
           />
           <MetricCard
-            title="Bugünkü benzersiz kategoriler"
+            title="Farklı kategorilerde harcama (bugün)"
             value={metrics?.uniqueCategoriesToday ?? '—'}
             icon={Layers}
+            goalHint={getMetricGoalHint(
+              'uniqueCategoriesToday',
+              metrics?.uniqueCategoriesToday ?? null
+            )}
           />
           <MetricCard
             title="Elektronik harcama (bugün)"
             value={metrics?.electronicsSpendToday != null ? `₺${metrics.electronicsSpendToday.toFixed(2)}` : '—'}
             icon={Cpu}
+            goalHint={getMetricGoalHint(
+              'electronicsSpendToday',
+              metrics?.electronicsSpendToday ?? null
+            )}
           />
           <MetricCard
-            title="Son 7 gün harcama"
+            title="Son 7 gün toplam harcama"
             value={metrics?.spend7d != null ? `₺${metrics.spend7d.toFixed(2)}` : '—'}
             icon={CalendarDays}
+            goalHint={getMetricGoalHint('spend7d', metrics?.spend7d ?? null)}
           />
         </div>
       </section>
